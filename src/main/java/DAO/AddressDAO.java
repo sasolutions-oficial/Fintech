@@ -1,6 +1,6 @@
 package DAO;
 import Model.Address;
-import Model.User;
+import Model.ReturnData;
 //import com.google.gson.Gson;
 import config.ConnectionFactory;
 
@@ -8,10 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 
 public class AddressDAO implements Dao<Address>{
 //    Gson gson = new Gson();
@@ -55,7 +55,9 @@ public class AddressDAO implements Dao<Address>{
     }
 
     @Override
-    public void save(Address address) {
+    public ReturnData save(Address address) {
+    	ReturnData returnData = new ReturnData();
+    	
         if(!Objects.equals(address.getComplemento(), "")){
             String query = "INSERT INTO t_fin_address (num_cep, nom_logradouro, num_residencial, txt_complemento, nom_bairro, nom_cidade, txt_uf, cod_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try(Connection conexao = ConnectionFactory.getConnection();
@@ -72,8 +74,12 @@ public class AddressDAO implements Dao<Address>{
                 statement.executeUpdate();
 
                 System.out.println("Endereço cadastrado com sucesso");
+                returnData.setIsSaved(true);
+                returnData.setMessage("Endereço cadastrado com sucesso!");
 
             } catch (SQLException e){
+            	returnData.setIsSaved(false);
+                returnData.setMessage(e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -91,24 +97,35 @@ public class AddressDAO implements Dao<Address>{
                 statement.setString(9, address.getIdUsuario());
 
                 System.out.println("Endereço cadastrado com sucesso");
-
+                
+                returnData.setIsSaved(true);
+                returnData.setMessage("Endereço cadastrado com sucesso!");
             } catch (SQLException e){
+            	returnData.setIsSaved(false);
+                returnData.setMessage(e.getMessage());
                 e.printStackTrace();
             }
         }
-
+        return returnData;
     }
 
     @Override
-    public void delete(String id) {
-        String query = "DELETE FROM t_fin_address WHERE cod_user = " + "'" + id + "'";
+    public ReturnData delete(String id) {
+    	ReturnData returnData = new ReturnData();
+    	
+    	String query = "DELETE FROM t_fin_address WHERE cod_user = " + "'" + id + "'";
         try(Connection conexao = ConnectionFactory.getConnection();
             PreparedStatement statement = conexao.prepareStatement(query);
             ResultSet result = statement.executeQuery()){
             result.next();
             System.out.println(id + " deletado com sucesso");
+            returnData.setIsSaved(true);
+            returnData.setMessage(id + " deletado com sucesso");
         }catch (SQLException e){
+        	returnData.setIsSaved(false);
+            returnData.setMessage(e.getMessage());
             e.printStackTrace();
         }
+        return returnData;
     }
 }
