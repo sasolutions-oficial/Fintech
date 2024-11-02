@@ -40,7 +40,7 @@ public class User extends HttpServlet {
 		
 		UserDAO user = new UserDAO();
 		
-		Optional<Model.User> userData = user.get("25DDFD3C9F82AD20E063103CA8C0AFAB");
+		Optional<Model.User> userData = user.get(id);
 
 		Gson gson = new Gson();
 		String json = gson.toJson(userData);
