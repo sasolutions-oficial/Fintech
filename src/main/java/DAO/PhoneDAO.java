@@ -1,6 +1,7 @@
 package DAO;
 
 import Model.Phone;
+import Model.ReturnData;
 import Model.User;
 //import com.google.gson.Gson;
 import config.ConnectionFactory;
@@ -60,7 +61,7 @@ public class PhoneDAO implements Dao<Phone> {
                 phone.setId(result.getString("ind_telefone"));
                 phone.setDdd(result.getString("num_ddd"));
                 phone.setTelefone(result.getString("num_telefone"));
-                phone.setRamal(result.getString("num_ramal"));
+                phone.setRamal(result.getString("num_ramal") != null ? result.getString("num_ramal") : "");
                 phone.setTipoTelefone(result.getInt("ind_tipo"));
                 phone.setIdUsuario(result.getString("cod_user"));
 
@@ -74,36 +75,73 @@ public class PhoneDAO implements Dao<Phone> {
     }
 
     @Override
-    public void save(Phone phone) {
-        String query = "INSERT INTO t_fin_phone (num_ddd, num_telefone, num_ramal, ind_tipo, cod_user) values (?, ?, ?, ?, ?)";
+    public ReturnData save(Phone phone) {
+    	ReturnData returnData = new ReturnData();
 
-        try(Connection conexao = ConnectionFactory.getConnection();
-            PreparedStatement statement = conexao.prepareStatement(query)) {
+    	if(phone.getRamal() != null){
+    		String query = "INSERT INTO t_fin_phone (num_ddd, num_telefone, num_ramal, ind_tipo, cod_user) values (?, ?, ?, ?, ?)";
+    		try(Connection conexao = ConnectionFactory.getConnection();
+	            PreparedStatement statement = conexao.prepareStatement(query)) {
 
-            statement.setString(1, phone.getDdd());
-            statement.setString(2, phone.getTelefone());
-            statement.setString(3, phone.getRamal());
-            statement.setInt(4, phone.getTipoTelefone());
-            statement.setString(5, phone.getIdUsuario());
+	            statement.setString(1, phone.getDdd());
+	            statement.setString(2, phone.getTelefone());
+	            statement.setString(3, phone.getRamal());
+	            statement.setInt(4, phone.getTipoTelefone());
+	            statement.setString(5, phone.getIdUsuario());
+	            statement.executeUpdate();
 
-            statement.executeUpdate();
+	            System.out.println("Telefone cadastrado com sucesso");
+	            returnData.setIsSaved(true);
+	            returnData.setMessage("Telefone cadastrado com sucesso!");
+	            
+	        } catch (SQLException e){
+	        	returnData.setIsSaved(false);
+	            returnData.setMessage(e.getMessage());
+	            e.printStackTrace();
+	        }
+    	} else {
+    		String query = "INSERT INTO t_fin_phone (num_ddd, num_telefone, ind_tipo, cod_user) values (?, ?, ?, ?)";
+    		try(Connection conexao = ConnectionFactory.getConnection();
+	            PreparedStatement statement = conexao.prepareStatement(query)) {
 
-            System.out.println("Telefone cadastrado com sucesso");
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+	            statement.setString(1, phone.getDdd());
+	            statement.setString(2, phone.getTelefone());
+	            statement.setInt(3, phone.getTipoTelefone());
+	            statement.setString(4, phone.getIdUsuario());
+	            statement.executeUpdate();
+
+	            System.out.println("Telefone cadastrado com sucesso");
+	            returnData.setIsSaved(true);
+	            returnData.setMessage("Telefone cadastrado com sucesso!");
+	            
+	        } catch (SQLException e){
+	        	returnData.setIsSaved(false);
+	            returnData.setMessage(e.getMessage());
+	            e.printStackTrace();
+	        }
+    	}
+    	
+		return returnData;
     }
 
     @Override
-    public void delete(String id) {
+    public ReturnData delete(String id) {
+    	ReturnData returnData = new ReturnData();
+    	
         String query = "DELETE FROM t_fin_phone WHERE ind_telefone = " + "'" + id + "'";
         try(Connection conexao = ConnectionFactory.getConnection();
             PreparedStatement statement = conexao.prepareStatement(query);
             ResultSet result = statement.executeQuery()){
             result.next();
+            
             System.out.println(id + " deletado com sucesso");
+            returnData.setIsSaved(true);
+            returnData.setMessage(id + " deletado com sucesso");
         }catch (SQLException e){
+        	returnData.setIsSaved(false);
+            returnData.setMessage(e.getMessage());
             e.printStackTrace();
         }
+        return returnData;
     }
 }

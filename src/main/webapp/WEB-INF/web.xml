@@ -12,10 +12,19 @@
   <servlet>
     <servlet-name>User</servlet-name>
     <servlet-class>User</servlet-class>
-</servlet>
-<servlet-mapping>
-    <servlet-name>User</servlet-name>
-    <url-pattern>/user</url-pattern>
-    <url-pattern>/user/*</url-pattern>
-</servlet-mapping>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>User</servlet-name>
+	 <url-pattern>/user</url-pattern>
+	 <url-pattern>/user/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Phone</servlet-name>
+    <servlet-class>Phone</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>Phone</servlet-name>
+	 <url-pattern>/phone</url-pattern>
+	 <url-pattern>/phone/*</url-pattern>
+  </servlet-mapping>
 </web-app>
