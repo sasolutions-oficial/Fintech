@@ -1,6 +1,9 @@
 
 
 import java.io.IOException;
+//import java.sql.SQLException;
+import java.util.Optional;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,13 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import DAO.UserDAO;
-import config.ConnectionFactory;
+//import config.ConnectionFactory;
+
+
 
 
 /**
  * Servlet implementation class User
  */
-@WebServlet("/user")
+@WebServlet("/user/*")
 public class User extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -30,18 +35,19 @@ public class User extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+		String[] pathInfo = request.getPathInfo().split("/");
+		String id = pathInfo[1];
 		
 		UserDAO user = new UserDAO();
 		
-		user.get("25DDFD3C9F82AD20E063103CA8C0AFAB");
+		Optional<Model.User> userData = user.get("25DDFD3C9F82AD20E063103CA8C0AFAB");
 
-		String json = new Gson().toJson(user);
+		Gson gson = new Gson();
+		String json = gson.toJson(userData);
+		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json);
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -64,6 +70,7 @@ public class User extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 	}
 
 }

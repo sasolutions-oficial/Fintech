@@ -3,9 +3,6 @@ package config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.lang.ClassNotFoundException;
-import java.lang.Class;
-
 
 public class ConnectionFactory {
     private static final String URL = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl";
@@ -20,7 +17,8 @@ public class ConnectionFactory {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Conexão realizada");
             result = connection;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.out.println("Erro ao conectar ao banco de dados: " + e.getMessage());
             throw e;
         }
