@@ -94,6 +94,7 @@ public class Phone extends HttpServlet {
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		response.setStatus(returnData.getIsSaved() ? 200 : 400);
 		response.getWriter().write(json1);
 	}
 
@@ -113,13 +114,14 @@ public class Phone extends HttpServlet {
 		
 		PhoneDAO phone = new PhoneDAO();
 		
-		ReturnData phoneData = phone.delete(id);
+		ReturnData returnData = phone.delete(id);
 
 		Gson gson = new Gson();
-		String json = gson.toJson(phoneData);
+		String json = gson.toJson(returnData);
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		response.setStatus(returnData.getIsSaved() ? 200 : 400);
         response.getWriter().write(json);
 	}
 

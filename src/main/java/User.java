@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 
 import DAO.UserDAO;
 import Model.*;
@@ -58,9 +60,14 @@ public class User extends HttpServlet {
 		Gson gson = new Gson();
 		String json = gson.toJson(userData);
 		
+		String idOfUser = userData.get().getId() != null ? userData.get().getId() : "";
+		JsonElement emptyUserParsed = new JsonParser().parse("{\"value\": {}}");
+		String emptyUser = gson.toJson(emptyUserParsed);
+		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+		response.setStatus(idOfUser.isBlank() ? 400 : 200);
+        response.getWriter().write(idOfUser.isBlank() ? emptyUser : json);
 	}
 
 	/**
@@ -115,8 +122,10 @@ public class User extends HttpServlet {
 		ReturnData returnData = user.save(userData);
 		String json1 = gson.toJson(returnData);
 		
+		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		response.setStatus(returnData.getIsSaved() ? 200 : 400);
 		response.getWriter().write(json1);
 	}
 
@@ -136,13 +145,14 @@ public class User extends HttpServlet {
 		
 		UserDAO user = new UserDAO();
 		
-		ReturnData userData = user.delete(id);
+		ReturnData returnData = user.delete(id);
 
 		Gson gson = new Gson();
-		String json = gson.toJson(userData);
+		String json = gson.toJson(returnData);
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		response.setStatus(returnData.getIsSaved() ? 200 : 400);
         response.getWriter().write(json);
 		
 	}

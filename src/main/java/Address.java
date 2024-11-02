@@ -92,6 +92,7 @@ public class Address extends HttpServlet {
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		response.setStatus(returnData.getIsSaved() ? 200 : 400);
 		response.getWriter().write(json1);
 	}
 
@@ -111,13 +112,14 @@ public class Address extends HttpServlet {
 		
 		AddressDAO address = new AddressDAO();
 		
-		ReturnData addressData = address.delete(id);
+		ReturnData returnData = address.delete(id);
 
 		Gson gson = new Gson();
-		String json = gson.toJson(addressData);
+		String json = gson.toJson(returnData);
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		response.setStatus(returnData.getIsSaved() ? 200 : 400);
         response.getWriter().write(json);
 	}
 
