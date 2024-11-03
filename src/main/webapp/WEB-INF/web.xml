@@ -36,4 +36,12 @@
 	 <url-pattern>/phone</url-pattern>
 	 <url-pattern>/phone/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>Auth</servlet-name>
+    <servlet-class>Auth</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>Auth</servlet-name>
+	 <url-pattern>/auth/login</url-pattern>
+  </servlet-mapping>
 </web-app>

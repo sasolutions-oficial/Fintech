@@ -2,7 +2,7 @@ package DAO;
 
 import Model.Phone;
 import Model.ReturnData;
-import Model.User;
+
 //import com.google.gson.Gson;
 import config.ConnectionFactory;
 
