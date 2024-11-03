@@ -44,4 +44,21 @@
 	<servlet-name>Auth</servlet-name>
 	 <url-pattern>/auth/login</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>Transaction</servlet-name>
+    <servlet-class>Transaction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>Transaction</servlet-name>
+	<url-pattern>/transaction</url-pattern>
+	<url-pattern>/transaction/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Transactions</servlet-name>
+    <servlet-class>Transactions</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>Transactions</servlet-name>
+	<url-pattern>/transactions/*</url-pattern>
+  </servlet-mapping>
 </web-app>

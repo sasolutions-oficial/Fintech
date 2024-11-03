@@ -31,12 +31,10 @@ public class UserDAO implements Dao<User> {
             user.setNome(result.getString("nom_user"));
             user.setCpf(result.getString("num_cpf"));
             user.setNascimento(result.getDate("dat_nascimento"));
-
             user.setNaturalidade(result.getString("txt_naturalidade") != null ? result.getString("txt_naturalidade") : "");
             user.setUfNascimento(result.getString("txt_uf") != null ? result.getString("txt_uf") : "");
             user.setFiliacao1(result.getString("nom_filiacao1") != null ? result.getString("nom_filiacao1") : "");
             user.setFiliacao2(result.getString("nom_filiacao2") != null ? result.getString("nom_filiacao2") : "");
-
             user.setSexo(result.getInt("ind_sexo"));
             user.setEstadoCivil(result.getInt("ind_estado_civil"));
             user.setRaca(result.getInt("ind_raca"));
@@ -64,7 +62,7 @@ public class UserDAO implements Dao<User> {
                 user.setSenha(result.getString("txt_password"));
                 user.setNome(result.getString("nom_user"));
                 user.setCpf(result.getString("num_cpf"));
-
+                user.setNascimento(result.getDate("dat_nascimento"));
                 user.setNaturalidade(result.getString("txt_naturalidade") != null ? result.getString("txt_naturalidade") : "");
                 user.setUfNascimento(result.getString("txt_uf") != null ? result.getString("txt_uf") : "");
                 user.setFiliacao1(result.getString("nom_filiacao1") != null ? result.getString("nom_filiacao1") : "");

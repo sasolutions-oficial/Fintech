@@ -1,38 +1,32 @@
 package Model;
 
-import java.util.UUID;
+//import com.google.gson.Gson;
+import java.sql.Timestamp;
 
 public class Transaction {
-    private UUID id;
-    private int tipo;
+    private String id;
     private String descricao;
     private double valor;
-    private UUID idUsuario;
-    private String cpfUsuario;
+    private int tipo;
+    private String data;
+    private String idUsuario;
 
     public Transaction(){}
-    public Transaction(int tipo, String descricao, double valor, UUID idUsuario, String cpfUsuario){
-        this.tipo = tipo;
+    public Transaction(String id, String descricao, double valor, int tipo, String data, String idUsuario){
+        this.id = id;
         this.descricao = descricao;
         this.valor = valor;
+        this.tipo = tipo;
+        this.data = data;
         this.idUsuario = idUsuario;
-        this.cpfUsuario = cpfUsuario;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public int getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
     }
 
     public String getDescricao() {
@@ -42,7 +36,7 @@ public class Transaction {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
+    
     public double getValor() {
         return valor;
     }
@@ -50,25 +44,35 @@ public class Transaction {
     public void setValor(double valor) {
         this.valor = valor;
     }
+    
+    public String getData() {
+        return data;
+    }
 
-    public UUID getIdUsuario() {
+    public void setData(String data) {
+        this.data = data;
+    }
+    
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(UUID idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 
-    public String getCpfUsuario() {
-        return cpfUsuario;
-    }
-
-    public void setCpfUsuario(String cpfUsuario) {
-        this.cpfUsuario = cpfUsuario;
-    }
-
     public Transaction getTransactionData(){
-        Transaction transaction = new Transaction(tipo, descricao, valor, idUsuario, cpfUsuario);
-        return  transaction;
+//    	Gson gson = new Gson();
+    	Transaction transaction = new Transaction(id, descricao, valor, tipo, data, idUsuario);
+//    	System.out.println(gson.toJson(transaction));
+        return transaction;
     }
 }

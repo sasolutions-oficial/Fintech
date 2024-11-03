@@ -1,22 +1,22 @@
-import DAO.AddressDAO;
-import DAO.PhoneDAO;
-import DAO.UserDAO;
+//import DAO.AddressDAO;
+//import DAO.PhoneDAO;
+//import DAO.UserDAO;
 
-import Model.Address;
-import Model.Phone;
-import Model.User;
+//import Model.Address;
+//import Model.Phone;
+//import Model.User;
 //import com.google.gson.Gson;
 import config.ConnectionFactory;
 
 import java.sql.SQLException;
-import java.sql.Date;
+//import java.sql.Date;
 
 public class App {
     public static void main(String [] args) throws SQLException {
         ConnectionFactory.getConnection();
-        UserDAO user = new UserDAO();
-        AddressDAO address = new AddressDAO();
-        PhoneDAO phone = new PhoneDAO();
+//        UserDAO user = new UserDAO();
+//        AddressDAO address = new AddressDAO();
+//        PhoneDAO phone = new PhoneDAO();
 //        Gson gson = new Gson();
 
 //        User saveUser = new User("", "teste@teste.com", "Teste@123", "Nome de Teste do Teste", "12345678900");

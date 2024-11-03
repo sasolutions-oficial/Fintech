@@ -2,10 +2,6 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Optional;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,9 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
-import DAO.UserDAO;
 import Model.ReturnData;
-import DAO.AddressDAO;
 import DAO.PhoneDAO;
 
 /**
@@ -42,7 +36,7 @@ public class Phone extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		String[] pathInfo = request.getPathInfo().split("/");
 		String id = pathInfo[1];
 		

@@ -2,7 +2,13 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,22 +18,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import DAO.AddressDAO;
+import DAO.TransactionDAO;
 import Model.ReturnData;
 
 /**
- * Servlet implementation class Address
+ * Servlet implementation class Transactions
  */
-@WebServlet("/address/*")
-public class Address extends HttpServlet {
+@WebServlet("/transaction/*")
+public class Transaction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+//	TimeZone tz = TimeZone.getTimeZone("GMT-3");
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+//	df.setTimeZone(tz);
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Address() {
+    public Transaction() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,16 +51,23 @@ public class Address extends HttpServlet {
 		String[] pathInfo = request.getPathInfo().split("/");
 		String id = pathInfo[1];
 		
-		AddressDAO address = new AddressDAO();
+		TransactionDAO transaction = new TransactionDAO();
 		
-		Optional<Model.Address> addressData = address.get(id);
+		Optional<Model.Transaction> transactionData = transaction.get(id);
 
 		Gson gson = new Gson();
-		String json = gson.toJson(addressData);
+		String json = gson.toJson(transactionData);
+		
+		String idOfTransaction = transactionData.get().getId() != null ? transactionData.get().getId() : "";
+		JsonElement emptyUserParsed = new JsonParser().parse("{\"value\": {}}");
+		String emptyUser = gson.toJson(emptyUserParsed);
+		
+//		System.out.print(json);
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+		response.setStatus(idOfTransaction.isBlank() ? 400 : 200);
+        response.getWriter().write(idOfTransaction.isBlank() ? emptyUser : json);
 	}
 
 	/**
@@ -58,32 +77,28 @@ public class Address extends HttpServlet {
 		StringBuilder buffer = new StringBuilder();
 		BufferedReader reader = request.getReader();
 		String line;
-		Model.Address addressData = null;
+		Model.Transaction transactionData = null;
 		
 		while((line = reader.readLine()) != null) {
 			buffer.append(line);
 			buffer.append(System.lineSeparator());
 		}
-		Gson gson = new GsonBuilder().setDateFormat("YYYY-MM-DD").create();
+		
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 		JsonObject json = gson.fromJson(buffer.toString(), JsonObject.class);
 		
-		String cep = json.get("cep").toString().replaceAll("\"", "");
-		String logradouro = json.get("logradouro").toString().replaceAll("\"", "");
-		String numero = json.get("numero").toString().replaceAll("\"", "");
-		String complemento = json.get("complemento").toString().replaceAll("\"", "");
-		String bairro = json.get("bairro").toString().replaceAll("\"", "");
-		String cidade = json.get("cidade").toString().replaceAll("\"", "");
-		String uf = json.get("uf").toString().replaceAll("\"", "");
+		String descricao = json.get("descricao").toString().replaceAll("\"", "");
+		double valor = json.get("valor").getAsDouble();
+		int tipo = json.get("tipo").getAsInt();
+		String data = json.get("data").toString().replaceAll("\"", "");
 		String idUsuario = json.get("idUsuario").toString().replaceAll("\"", "");
 		
-		if(complemento != null) {
-			addressData = new Model.Address("", cep, logradouro, numero, complemento, bairro, cidade, uf, idUsuario);
-		}else {
-			addressData = new Model.Address("", cep, logradouro, numero, bairro, cidade, uf, idUsuario);
-		}
+//		System.out.print(data);
 
-		AddressDAO address = new AddressDAO();
-		ReturnData returnData = address.save(addressData);
+		transactionData = new Model.Transaction("", descricao, valor, tipo, data, idUsuario);
+		
+		TransactionDAO transaction = new TransactionDAO();
+		ReturnData returnData = transaction.save(transactionData);
 		String json1 = gson.toJson(returnData);
 		
 		response.setContentType("application/json");
@@ -106,9 +121,9 @@ public class Address extends HttpServlet {
 		String[] pathInfo = request.getPathInfo().split("/");
 		String id = pathInfo[1];
 		
-		AddressDAO address = new AddressDAO();
+		TransactionDAO transaction = new TransactionDAO();
 		
-		ReturnData returnData = address.delete(id);
+		ReturnData returnData = transaction.delete(id);
 
 		Gson gson = new Gson();
 		String json = gson.toJson(returnData);
